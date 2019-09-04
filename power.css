@@ -1,0 +1,46 @@
+
+
+.power-main {
+    background-color: rgba(255,255,255,0.4);
+    color:white;
+    font-family: Arial;
+    padding:40px;
+}
+body {
+    overflow: hidden;
+    /*height: 95vh;*/
+}
+
+#big-button {
+    display:block;
+    height: 300px;
+    width: 300px;
+    border-radius: 50%;
+    border: 3px solid black;
+    background-color: red;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#button-text {
+    font-size:3em;
+}
+
+.textbox {
+    max-width: 700px;
+}
+
+.title {
+    font-size:2em;
+    text-align:center;
+}
+
+.textbox {
+    width:500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.background-initial {
+    background-color: #444;
+}
