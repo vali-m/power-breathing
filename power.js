@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const TIME_IN = 5;
 const TIME_HOLD = 4 * TIME_IN;
@@ -13,44 +13,60 @@ let start = new Date;
 let endTime = new Date("Jan 5, 2021 15:37:25").getTime();
 
 let count;
-let phase;
-const phases = [TIME_IN, TIME_HOLD, TIME_OUT];
+let phase = 0;
+const phaseSeconds = [TIME_IN, TIME_HOLD, TIME_OUT];
+const colors = ["green", "yellow", "red"];
+const transitionTexts = ["NOW HOLD IT", "NOW EXHALE", "NOW INHALE"];
+const transitionColor = "lightgray";
 
 function getSecondsRemaining(endTime) {
-    let msRemaining = endTime - new Date;
+    let msRemaining = endTime - Number(new Date) + 25;
     return Math.floor(msRemaining / 1000);
 }
 
-function updateTimer(){
-    // $('.Timer').text((new Date - start) / 1000 + " Seconds");
-    let timeRemaining = getSecondsRemaining(endTime);
-    $buttonText.text(timeRemaining + " Seconds");
+function applyPhase() {
+    start = new Date;
+    endTime = Number(start) + phaseSeconds[phase] * 1000;
+    $button.css("background-color", colors[phase]);
 }
 
-function incrementPhase() {
-    let phaseCount = phases.length;
-    if(phase = phaseCount - 1){
-        phase = 0;
+function updateTimer() {
+    let timeRemaining = getSecondsRemaining(endTime);
+    if (timeRemaining === 0) {
+        $buttonText.text(transitionTexts[phase]);
+        $button.css("background-color", transitionColor);
+    } else if (timeRemaining < 0) {
+        incrementPhase();
+        applyPhase();
+    } else {
+        $buttonText.text(timeRemaining + " Seconds");
     }
-    else {
+}
+
+
+
+function incrementPhase() {
+    let phaseCount = phaseSeconds.length;
+    if (phase === phaseCount - 1) {
+        phase = 0;
+    } else {
         phase++;
     }
 }
 
 
-
-$("#big-button").click(function() {
-    updateTimer()
+$button.click(function () {
+    updateTimer();
     $button.attr("disabled", true);
     setInterval(updateTimer, 1000);
     count = 0;
     phase = 0;
 
 
-})
+});
 
-$( document ).ready(function() {
+$(document).ready(function () {
     let a = $("body");
-
+    applyPhase();
     console.log(a);
 });
