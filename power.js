@@ -10,7 +10,7 @@ let $button = $('#big-button');
 let $buttonText = $('#button-text');
 
 let start = new Date;
-let endTime = new Date("Jan 5, 2021 15:37:25").getTime();
+let endTime;
 
 let count;
 let phase = 0;
@@ -26,7 +26,7 @@ function getSecondsRemaining(endTime) {
 
 function applyPhase() {
     start = new Date;
-    endTime = Number(start) + phaseSeconds[phase] * 1000;
+    setEndTime();
     $button.css("background-color", colors[phase]);
 }
 
@@ -43,6 +43,9 @@ function updateTimer() {
     }
 }
 
+function setEndTime() {
+    endTime = Number(new Date) + phaseSeconds[phase] * 1000;
+}
 
 
 function incrementPhase() {
@@ -54,15 +57,18 @@ function incrementPhase() {
     }
 }
 
-
-$button.click(function () {
+function initButton() {
+    setEndTime();
     updateTimer();
     $button.attr("disabled", true);
-    setInterval(updateTimer, 1000);
     count = 0;
     phase = 0;
+}
 
 
+$button.click(function () {
+    initButton();
+    setInterval(updateTimer, 1000);
 });
 
 $(document).ready(function () {
