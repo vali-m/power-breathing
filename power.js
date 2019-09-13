@@ -8,11 +8,12 @@ const TIME_PAUSE = 1;
 
 let $button = $('#big-button');
 let $buttonText = $('#button-text');
+let $countNumber = $('#count-number');
 
 let start = new Date;
 let endTime;
 
-let count;
+let count = 0;
 let phase = 0;
 const phaseSeconds = [TIME_IN, TIME_HOLD, TIME_OUT];
 const colors = ["green", "yellow", "red"];
@@ -52,9 +53,14 @@ function incrementPhase() {
     let phaseCount = phaseSeconds.length;
     if (phase === phaseCount - 1) {
         phase = 0;
+        incrementCounter()
     } else {
         phase++;
     }
+}
+
+function incrementCounter() {
+    $countNumber.text(++count);
 }
 
 function initButton() {
