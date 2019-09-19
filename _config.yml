@@ -1,0 +1,3 @@
+#https://jekyllrb.com/docs/configuration/options/
+timezone: Europe/Bucharest
+future: true
