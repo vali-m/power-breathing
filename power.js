@@ -24,8 +24,12 @@ const colors = ["green", "yellow", "red"];
 const transitionTexts = ["NOW HOLD IT", "NOW EXHALE", "NOW INHALE"];
 const transitionColor = "lightgray";
 
+function getMillisRemaining() {
+    return endTime - Number(new Date);
+}
+
 function getSecondsRemaining() {
-    let msRemaining = endTime - Number(new Date) + 25;
+    let msRemaining = getMillisRemaining() + 25;
     return Math.floor(msRemaining / 1000);
 }
 
@@ -51,24 +55,24 @@ function updateTimer() {
 }
 
 function pauseTimer() {
-    timeLeftBeforePause = getSecondsRemaining();
+    timeLeftBeforePause = getMillisRemaining();
     isPaused = true;
     showPausedText();
 }
 
 function unpauseTimer() {
-    setEndTimeInSecondsFromNow(timeLeftBeforePause);
+    setEndTimeInMillisFromNow(timeLeftBeforePause);
     isPaused = false;
     hidePausedText();
     updateTimer();
 }
 
-function setEndTimeInSecondsFromNow(timeSeconds) {
-    endTime = Number(new Date) + timeSeconds * 1000;
+function setEndTimeInMillisFromNow(timeSeconds) {
+    endTime = Number(new Date) + timeSeconds ;
 }
 
 function setTimeForNextPhase() {
-    setEndTimeInSecondsFromNow(phaseSeconds[phase]);
+    setEndTimeInMillisFromNow(phaseSeconds[phase] * 1000);
 }
 
 
