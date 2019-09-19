@@ -8,10 +8,14 @@ const TIME_PAUSE = 1;
 
 let $button = $('#big-button');
 let $buttonText = $('#button-text');
+let $buttonPausedText = $('#button-paused-text');
 let $countNumber = $('#count-number');
 
 let start = new Date;
 let endTime;
+let isOngoing = false;
+let isPaused = true;
+let timeLeftBeforePause;
 
 let count = 0;
 let phase = 0;
@@ -20,32 +24,51 @@ const colors = ["green", "yellow", "red"];
 const transitionTexts = ["NOW HOLD IT", "NOW EXHALE", "NOW INHALE"];
 const transitionColor = "lightgray";
 
-function getSecondsRemaining(endTime) {
+function getSecondsRemaining() {
     let msRemaining = endTime - Number(new Date) + 25;
     return Math.floor(msRemaining / 1000);
 }
 
 function applyPhase() {
     start = new Date;
-    setEndTime();
+    setTimeForNextPhase();
     $button.css("background-color", colors[phase]);
 }
 
 function updateTimer() {
-    let timeRemaining = getSecondsRemaining(endTime);
-    if (timeRemaining === 0) {
-        $buttonText.text(transitionTexts[phase]);
-        $button.css("background-color", transitionColor);
-    } else if (timeRemaining < 0) {
-        incrementPhase();
-        applyPhase();
-    } else {
-        $buttonText.text(timeRemaining + " Seconds");
+    if (!isPaused) {
+        let timeRemaining = getSecondsRemaining();
+        if (timeRemaining === 0) {
+            $buttonText.text(transitionTexts[phase]);
+            $button.css("background-color", transitionColor);
+        } else if (timeRemaining < 0) {
+            incrementPhase();
+            applyPhase();
+        } else {
+            $buttonText.text(timeRemaining + " Seconds");
+        }
     }
 }
 
-function setEndTime() {
-    endTime = Number(new Date) + phaseSeconds[phase] * 1000;
+function pauseTimer() {
+    timeLeftBeforePause = getSecondsRemaining();
+    isPaused = true;
+    showPausedText();
+}
+
+function unpauseTimer() {
+    setEndTimeInSecondsFromNow(timeLeftBeforePause);
+    isPaused = false;
+    hidePausedText();
+    updateTimer();
+}
+
+function setEndTimeInSecondsFromNow(timeSeconds) {
+    endTime = Number(new Date) + timeSeconds * 1000;
+}
+
+function setTimeForNextPhase() {
+    setEndTimeInSecondsFromNow(phaseSeconds[phase]);
 }
 
 
@@ -64,21 +87,35 @@ function incrementCounter() {
 }
 
 function initButton() {
-    setEndTime();
+    isPaused = false;
+    isOngoing = true;
+    setTimeForNextPhase();
     updateTimer();
-    $button.attr("disabled", true);
+    // $button.attr("disabled", true);
     count = 0;
     phase = 0;
 }
 
 
 $button.click(function () {
-    initButton();
-    setInterval(updateTimer, 1000);
+    if(isOngoing){
+        if(isPaused) unpauseTimer();
+        else pauseTimer();
+    } else {
+        initButton();
+        setInterval(updateTimer, 1000);
+    }
 });
 
+function hidePausedText() {
+    $buttonPausedText.css('display', 'none');
+}
+
+function showPausedText() {
+    $buttonPausedText.css('display', '');
+}
+
 $(document).ready(function () {
-    let a = $("body");
+    hidePausedText();
     applyPhase();
-    console.log(a);
 });

@@ -21,7 +21,11 @@ body {
     margin-right: auto;
 }
 
-#button-text {
+#button-text {}
+
+#button-paused-text {}
+
+.button-text-size {
     font-size:2.5em;
     font-weight: bold;
 }
